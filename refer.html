@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+</head>
+<style>
+    .recipe_data{
+        width: 100%;
+    }
+    .recipe_data>h1{
+        text-align: center;
+    }
+    .recipe_data>img{
+        width: 80%;
+        margin-left: 10%;
+    }
+</style>
+<body>
+    <div class="recipe_data">
+
+    </div>
+</body>
+</html>
+<script>
+let rec_cont = document.querySelector(".recipe_data");
+
+let data = JSON.parse(localStorage.getItem("recipe"))||[];
+console.log(data)
+
+
+displayData(data);
+function displayData(data){
+
+    
+        let h1 = document.createElement("h1");
+    h1.textContent = data.title
+
+    let img = document.createElement("img");
+    img.src = data.image;
+
+    let desc = document.createElement("p");
+    desc.textContent = `Description:`+data.description
+    
+    let category = document.createElement("h3")
+    category.textContent = `category:`+data.category;
+
+    let ins = document.createElement("p");
+    ins.textContent = `Instructions:`+data.instructions;
+    rec_cont.append(h1,img,desc,category,ins)
+}
+</script>

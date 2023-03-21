@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Recepies</title>
+</head>
+<style>
+    .form{
+        margin-bottom: 2rem;
+    }
+    .form>input{
+        width: 250px;
+        margin-bottom: 1rem;
+        height: 30px;
+    }
+    .recipes-cont {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-gap:1rem;
+
+}
+.view{
+    width: 100px;
+    height: 40px;
+    border: none;
+    background-color: royalblue;
+    color: white;
+    border-radius: 20px;
+}
+.recipe-card {
+  width: 80%;
+  margin-bottom: 20px;
+  box-shadow: rgba(247, 60, 3, 0.25) 0px 54px 55px, rgba(247, 60, 3, 0.25) 0px -12px 30px, rgba(247, 60, 3, 0.25) 0px 4px 6px, rgba(247, 60, 3, 0.25) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.recipe-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.recipe-card .card-body {
+  padding: 10px;
+}
+
+.recipe-card h2 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+.recipe-card p {
+  margin: 10px 0;
+}
+
+.recipe-card .category {
+  margin-top: 10px;
+  font-style: italic;
+  text-align: right;
+}
+</style>
+<body>
+    <form action="" class="form">
+        <input type="text" id="username" placeholder="username" ><br>
+        <input type="text" id="title" placeholder="title" ><br>
+        <input type="url" id="image" placeholder="image" ><br>
+        <input type="text" id="description" placeholder="description" ><br>
+        <input type="text" id="category" placeholder="category"><br>
+        <input type="text" id="ingredients" placeholder="ingredients" ><br>
+        <input type="text" id="instructions" placeholder="instructions" ><br>
+        <input type="submit" value="submit">
+    </form>
+
+    <div class="recipes-cont">
+
+    </div>
+</body>
+</html>
+<script>
+    let form = document.querySelector("form");
+
+    form.addEventListener('submit',(e)=>{
+        e.preventDefault()
+        let username= document.getElementById('username').value
+   let  title= document.getElementById('title').value
+   let  image= document.getElementById('image').value
+   let  description= document.getElementById('description').value
+   let  category= document.getElementById('category').value
+   let  ingredients= document.getElementById('ingredients').value.split(',').map(item => item.trim())
+   let  instructions= document.getElementById('instructions').value
+
+   const recipe = {
+    username,title,category,ingredients,instructions,image,description
+  };
+        
+        
+ 
+    fetch('http://localhost:3000/recipes', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(recipe)
+    })
+    .then(response => {
+    console.log('Success:', response);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+
+})
+
+let url ="http://localhost:3000/recipes";
+let recipeCont = document.querySelector(".recipes-cont")
+async function getRecipes(){
+    try {
+        let Recipes_url = `${url}`;
+    let res = await fetch(Recipes_url);
+    let data = await res.json();
+    console.log(data)
+    displayRecipe(data);
+    } catch (error) {
+        console.log(error)
+    }
+    
+}
+
+function displayRecipe(data){
+    recipeCont.innerHTML = '';
+
+
+    data.forEach(el=>{
+        let card = document.createElement("div")
+        card.classList.add('recipe-card')
+
+        let image = document.createElement('img');
+    image.src = el.image;
+    image.alt = el.title;
+    card.appendChild(image);
+
+
+    let body = document.createElement('div');
+    body.classList.add('card-body');
+
+    let title = document.createElement('h2');
+    title.textContent = el.title;
+    body.appendChild(title);
+
+
+    let description = document.createElement('p');
+    description.textContent = el.description;
+    body.appendChild(description);
+
+    let category = document.createElement('p');
+    category.classList.add('category');
+    category.textContent = el.category;
+    body.appendChild(category);
+
+    let editBtn = document.createElement('button');
+    editBtn.textContent = 'edit';
+    editBtn.classList.add("view")
+   
+
+let deleteBtn = document.createElement('button');
+deleteBtn.textContent = 'delete';
+deleteBtn.classList.add("view")
+
+
+    body.appendChild(editBtn,deleteBtn);
+    card.appendChild(body);
+    recipeCont.appendChild(card);
+    })
+
+    
+}
+
+getRecipes()
+</script>

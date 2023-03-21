@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipes</title>
+</head>
+<style>
+    
+    .navbar{
+        width: 80%;
+        
+        height: 40px;
+        margin-left: 10%;
+    }
+    .nav-items{
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+    }
+</style>
+<body>
+    <nav class="navbar">
+        <ul class="nav-items">
+            <a href="authenticate.html"><li class="items">Signup and Login</li></a>
+            <a href="homepage.html"><li class="items">Homepage</li></a>
+            <a id="log" href="" onclick="checkLogin()"><li class="items">My Recipe</li></a>
+        </ul>
+    </nav>
+</body>
+</html>
+<script>
+
+    function checkLogin(){
+let log = document.getElementById("log")
+        if (localStorage.getItem('loggedIn') === 'true') {
+  // Redirect to the myrecipe.html page
+  window.location.href = 'myrecipe.html';
+  log.href = 'myrecipe.html'
+} else {
+  // Redirect to the authenticate.html page
+  log.href = 'authenticate.html'
+  window.location.href = 'authenticate.html';
+}
+    }
+
+</script>
